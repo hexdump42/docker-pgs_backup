@@ -1,18 +1,20 @@
 FROM postgres:latest
 LABEL version="0.1"
-LABEL description="Backup a postgresql database using pg_dump run as a startup task."
+LABEL description="Backup a postgresql database using pg_dump & optionally copy backup to S3."
 
 RUN apt-get update && \
-    apt-get install -y cron && \
+    apt-get install -y python3 python3-pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ADD backup.sh /backup.sh
-RUN chmod +x /backup.sh
+RUN pip install s3cmd
 
-ADD start.sh /start.sh
-RUN chmod +x /start.sh
+WORKDIR /app
+
+COPY *.sh .
+
+RUN chmod +x *.sh
 
 VOLUME /backup
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/app/start.sh"]
 CMD [""]

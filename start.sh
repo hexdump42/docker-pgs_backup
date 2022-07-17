@@ -11,7 +11,7 @@ PGPORT=${PGPORT:-5432}
 
 
 if [[ "$COMMAND" == 'backup' ]]; then
-    exec /backup.sh
+    exec /app/backup.sh
 else
     echo "Unknown command $COMMAND"
     echo "Available commands: backup"
